@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Foursquare Scraper</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      .form-horizontal .control-label {
+        text-align: left;
+        width: 50px;
+      }
+
+      .form-horizontal .controls {
+        margin-left: 50px;
+      }
+
+      .hero-unit {
+        padding: 30px;
+        padding-right: 0px;
+        padding-top: 10px;
+      }
+
+      .hero-unit h1 {
+        margin-bottom: 30px;
+      }
+    </style>
+      
+  </head>
+  <body>
+
+    <div class="container">
+
+      <!-- Header -->
+      <div class="row">
+        <div class="span7">
+          <h1>Places Crawl</h2>
+        </div>
+        <div class="span5" style="text-align:right">
+          <h3>Social Media Information Lab</h3>
+        </div>
+      </div>
+
+      <!-- Search Form -->
+      <div class="row">
+        <div class="span12">
+          <div class="hero-unit">
+            <form class="form-horizontal">
+
+              <div class="control-group">
+                <label class="control-label">Venue</label>
+                <div class="controls">
+                  <input type="text" placeholder="Chipotle" id="venue_name">
+                  or
+                  <select id="venue_drop">
+                    <option>Bars</option>
+                    <option>Plazas</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="near_name">Near</label>
+                <div class="controls">
+                  <input class="span3" type="text" placeholder="New York City" id="near_name">
+                  or
+                  <div class="input-append">
+                    <input class="span2" type="text" placeholder="154.03" id="lat"><span class="add-on">lat</span>
+                  </div>
+                  <div class="input-append">
+                    <input class="span2" type="text" placeholder="67.12" id="long"><span class="add-on">long</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label" for="radius">Radius</label>
+                <div class="controls">
+                  <div class="input-append">
+                    <input class="span1" type="text" value="500" id="radius"><span class="add-on">meters</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" id="search_btn" class="btn"><i class="icon-search icon-black"></i> Search</button>
+                  <button type="submit" id="crawl_btn" class="btn"><i class="icon-globe icon-black"></i> Crawl</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
