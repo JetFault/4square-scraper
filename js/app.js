@@ -40,24 +40,28 @@ $('#venue_form').submit(function() {
 	if(radius <= 0) {  
 		error = true;
 	} else {
-		data.radius = radius;
+//	data.radius = radius;
 	}
 
 	if(!error) {
-		var crawler_url = "http://localhost:8080/search_venue";
+		var my_url = window.location.host;
+		var crawler_url = my_url + "/search_venue";
 
 		$.ajax({
 			url : crawler_url,
 			type : 'GET',
-			dataType: 'json',
+			//dataType: 'json',
 			data : data,
-			success: function(data) {
+			success: function(resp) {
 				//Set up the Table
 				//$(#results).html(header);
+			
+				console.log(resp);
 
 				parseVenueSearch(resp);
 			},
 			error: function(ignore, textStatus, errorThrown) {
+							 console.log(ignore);
 				$('#results').html('<div class="span12">Error! ' + textStatus + '\n' + errorThrown + '</div>');
 			}
 		});
