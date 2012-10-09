@@ -1,0 +1,18 @@
+.form-horizontal .control-label {
+	text-align: left;
+	width: 50px;
+}
+
+.form-horizontal .controls {
+	margin-left: 50px;
+}
+
+.hero-unit {
+	padding: 30px;
+	padding-right: 0px;
+	padding-top: 10px;
+}
+
+.hero-unit h1 {
+	margin-bottom: 30px;
+}

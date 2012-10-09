@@ -4,27 +4,7 @@
     <title>Foursquare Scraper</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style type="text/css">
-      .form-horizontal .control-label {
-        text-align: left;
-        width: 50px;
-      }
-
-      .form-horizontal .controls {
-        margin-left: 50px;
-      }
-
-      .hero-unit {
-        padding: 30px;
-        padding-right: 0px;
-        padding-top: 10px;
-      }
-
-      .hero-unit h1 {
-        margin-bottom: 30px;
-      }
-    </style>
-      
+	<link href="css/app.css" rel="stylesheet">
   </head>
   <body>
 
@@ -120,67 +100,7 @@
 
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/app.js"></script>
 
-    <script>
-
-      crawler_url = "http://localhost:8080/search"
-
-      function parseData(data) {
-        
-      };
-
-      $('#venue_form').submit(function() {
-        data = {};
-        error =  false;
-
-        console.log("push");
-
-        //Precedence for venue_name over dropdown
-        venue = $("#venue_name").val();
-        if(!venue) {
-          venue = $("#venue_drop").val();
-          if(!venue) {
-            error = true;
-          }
-        }
-        data.venue = venue;
-
-        //Precedence for near_name over lat/long
-        near = $("#near_name").val();
-        if(!near) { 
-          lat = $("#lat").val();
-          lon = $("#long").val();
-
-          if(!lat || !long) { 
-            error = true;
-          } else {
-            data.lat = lat;
-            data.lon = lon;
-          }
-        } else {
-          data.near = near;
-        }
-
-        //Radius
-        radius = $("#radius");
-        if(radius == 0) {  
-          error = true;
-        } else {
-          data.radius = radius;
-        }
-
-        if(!error) {
-        
-          $.ajax({
-            'url' : crawler_url,
-            'type' : 'GET',
-            'data' : data
-          }).done(function(resp) {
-            parseData(resp);
-          });
-        }
-        return false;
-      });
-    </script>
   </body>
 </html>
