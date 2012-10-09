@@ -1,14 +1,12 @@
-var crawler_url = "http://localhost:8080/search";
 
-function parseData(data) {
+function parseVenueSearch(data) {
 	console.log(data);
 }
 
+//Venue Search
 $('#venue_form').submit(function() {
 	var data = {};
 	var error =  false;
-
-	console.log("push");
 
 	//Precedence for venue_name over dropdown
 	var venue = $("#venue_name").val();
@@ -18,7 +16,7 @@ $('#venue_form').submit(function() {
 			error = true;
 		}
 	}
-	data.venue = venue;
+	data.query = venue;
 
 	//Precedence for near_name over lat/long
 	var near = $("#near_name").val();
@@ -46,13 +44,22 @@ $('#venue_form').submit(function() {
 	}
 
 	if(!error) {
+		var crawler_url = "http://localhost:8080/search_venue";
 
 		$.ajax({
-			'url' : crawler_url,
-			'type' : 'GET',
-			'data' : data
-		}).done(function(resp) {
-			parseData(resp);
+			url : crawler_url,
+			type : 'GET',
+			dataType: 'json',
+			data : data,
+			success: function(data) {
+				//Set up the Table
+				//$(#results).html(header);
+
+				parseVenueSearch(resp);
+			},
+			error: function(ignore, textStatus, errorThrown) {
+				$('#results').html('<div class="span12">Error! ' + textStatus + '\n' + errorThrown + '</div>');
+			}
 		});
 	}
 	return false;
