@@ -1,6 +1,24 @@
 
 function parseVenueSearch(data) {
-	console.log(data);
+	
+	venue_resp = data;
+
+
+	for(var i = 0; i < venue_resp.length; i++) {
+		var venue = venue_resp[i];
+		$('#venue_table_body').append('<tr></tr>');
+		var table_row = $('#venue_table_body tr:last');
+		table_row.append('<td><input class="span1" type="checkbox"></td>');
+		table_row.append('<td>' + venue.name  + '</td>');
+		if(!venue.categories[0]) {
+			venue.categories[0] = {shortName:null};
+		}
+		table_row.append('<td>' + venue.categories[0].shortName  + '</td>');
+		table_row.append('<td>' + venue.stats.checkinsCount  + '</td>');
+		table_row.append('<td>' + venue.stats.tipCount  + '</td>');
+		table_row.append('<td>' + venue.likes.count  + '</td>');
+	}
+
 }
 
 //Venue Search
@@ -44,21 +62,24 @@ $('#venue_form').submit(function() {
 	}
 
 	if(!error) {
-		var my_url = window.location.host;
+
+		$('#results').load('venue_search.html');
+
+		var my_url = 'http://' + window.location.host + '/quantarch';
 		var crawler_url = my_url + "/search_venue";
 
 		$.ajax({
 			url : crawler_url,
 			type : 'GET',
-			//dataType: 'json',
+			dataType: 'json',
 			data : data,
-			success: function(resp) {
+			success: function(json) {
 				//Set up the Table
 				//$(#results).html(header);
 			
-				console.log(resp);
+				//console.log(resp);
 
-				parseVenueSearch(resp);
+				parseVenueSearch(json);
 			},
 			error: function(ignore, textStatus, errorThrown) {
 							 console.log(ignore);
