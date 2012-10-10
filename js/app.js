@@ -1,31 +1,34 @@
 
 //Venue Fetch
-$('#crawl_form').submit(function() {
-	var data = {};
-	$("#venue_table input:checkbox").each(function() {
-		if(this.checked) {
-			data.ids_string = data.ids_string ? data.ids_string + "," + this.name : this.name;
-		}
+venue_fetch = function() {
+	$('#crawl_form').submit(function() {
+		var data = {};
+		$("#venue_table input:checkbox").each(function() {
+			if(this.checked) {
+				data.ids_string = data.ids_string ? data.ids_string + "," + this.name : this.name;
+			}
+		});
+
+		var my_url = 'http://' + window.location.host + '/quantarch';
+		var crawler_url = my_url + "/submit_job";
+
+		console.log(data);
+
+		$.ajax({
+			url : crawler_url,
+			type : 'POST',
+			data : data,
+			success: function(data) {
+				$('#results').html('<div class="span12">Processing. Visit ' + my_url + '/get_jobs_status' + '</div>');
+			},
+			error: function(ignore, textStatus, errorThrown) {
+							 $('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
+						 }
+		});
+
+		return false;
 	});
-	console.log(data.ids_string);
-
-	var my_url = 'http://' + window.location.host + '/quantarch';
-	var crawler_url = my_url + "/submit_job";
-
-	$.ajax({
-		url : crawler_url,
-		type : 'POST',
-		data : data,
-		success: function(data) {
-			$('#results').html('<div class="span12">Processing. Visit ' + my_url + '/get_jobs_status' + '</div>');
-		},
-		error: function(ignore, textStatus, errorThrown) {
-			$('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
-		}
-	});
-
-
-});
+};
 
 function parseVenueSearch(data) {
 	
@@ -102,6 +105,7 @@ $('#venue_form').submit(function() {
 			data : data,
 			success: function(json) {
 				parseVenueSearch(json);
+				venue_fetch();
 			},
 			error: function(ignore, textStatus, errorThrown) {
 							 console.log(ignore);
