@@ -1,14 +1,41 @@
 
+//Venue Fetch
+$('#crawl_form').submit(function() {
+	var data = {};
+	$("#venue_table input:checkbox").each(function() {
+		if(this.checked) {
+			data.ids_string = data.ids_string ? data.ids_string + "," + this.name : this.name;
+		}
+	});
+	console.log(data.ids_string);
+
+	var my_url = 'http://' + window.location.host + '/quantarch';
+	var crawler_url = my_url + "/submit_job";
+
+	$.ajax({
+		url : crawler_url,
+		type : 'POST',
+		data : data,
+		success: function(data) {
+			$('#results').html('<div class="span12">Processing. Visit ' + my_url + '/get_jobs_status' + '</div>');
+		},
+		error: function(ignore, textStatus, errorThrown) {
+			$('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
+		}
+	});
+
+
+});
+
 function parseVenueSearch(data) {
 	
 	venue_resp = data;
-
 
 	for(var i = 0; i < venue_resp.length; i++) {
 		var venue = venue_resp[i];
 		$('#venue_table_body').append('<tr></tr>');
 		var table_row = $('#venue_table_body tr:last');
-		table_row.append('<td><input class="span1" type="checkbox"></td>');
+		table_row.append('<td><input class="span1" type="checkbox" name="' + venue.id + '" ></td>');
 		table_row.append('<td>' + venue.name  + '</td>');
 		if(!venue.categories[0]) {
 			venue.categories[0] = {shortName:null};
@@ -62,7 +89,7 @@ $('#venue_form').submit(function() {
 	}
 
 	if(!error) {
-
+		//Set up the table
 		$('#results').load('venue_search.html');
 
 		var my_url = 'http://' + window.location.host + '/quantarch';
@@ -74,11 +101,6 @@ $('#venue_form').submit(function() {
 			dataType: 'json',
 			data : data,
 			success: function(json) {
-				//Set up the Table
-				//$(#results).html(header);
-			
-				//console.log(resp);
-
 				parseVenueSearch(json);
 			},
 			error: function(ignore, textStatus, errorThrown) {
