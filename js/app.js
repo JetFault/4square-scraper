@@ -1,3 +1,18 @@
+$().ready(function() {
+	var my_url = 'http://' + window.location.host + '/quantarch';
+	var crawler_url = my_url + '/get_categories';
+	$.ajax({
+		url : crawler_url,
+		type : 'GET',
+		success : function(categories) {
+			for(category in categories) {
+				$('#venue_drop').append('<option value="' + category + '">' + category + '</option>');
+			}
+		},
+		error : function() {}
+	});
+});
+
 
 //Venue Fetch
 venue_fetch = function() {
@@ -22,8 +37,8 @@ venue_fetch = function() {
 				$('#results').html('<div class="span12">Processing. Visit ' + my_url + '/get_jobs_status' + '</div>');
 			},
 			error: function(ignore, textStatus, errorThrown) {
-							 $('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
-						 }
+				$('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
+			}
 		});
 
 		return false;
@@ -59,12 +74,15 @@ $('#venue_form').submit(function() {
 	//Precedence for venue_name over dropdown
 	var venue = $("#venue_name").val();
 	if(!venue) {
-		venue = $("#venue_drop").val();
-		if(!venue) {
+		var category = $("#venue_drop").val();
+		if(!category) {
 			error = true;
+		} else {
+			data.categoryId = venue;
 		}
+	} else {
+		data.query = venue;
 	}
-	data.query = venue;
 
 	//Precedence for near_name over lat/long
 	var near = $("#near_name").val();
@@ -88,7 +106,7 @@ $('#venue_form').submit(function() {
 	if(radius <= 0) {  
 		error = true;
 	} else {
-//	data.radius = radius;
+		data.radius = radius;
 	}
 
 	if(!error) {
