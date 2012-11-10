@@ -18,27 +18,34 @@ $().ready(function() {
 venue_fetch = function() {
 	$('#crawl_form').submit(function() {
 		var data = {};
-		$("#venue_table input:checkbox").each(function() {
+		var items = $("#venue_table input:checkbox");
+
+		items.each(function(index, item) {
 			if(this.checked) {
 				data.ids_string = data.ids_string ? data.ids_string + "," + this.name : this.name;
 			}
-		});
+			if(index == items.length - 1) {
 
-		var my_url = 'http://' + window.location.host + '/quantarch';
-		var crawler_url = my_url + "/submit_job";
+				var my_url = 'http://' + window.location.host + '/quantarch';
+				var crawler_url = my_url + "/submit_job";
 
-		console.log(data);
+				console.log(data);
 
-		$.ajax({
-			url : crawler_url,
-			type : 'POST',
-			data : data,
-			success: function(data) {
-				$('#results').html('<div class="span12">Processing. Visit ' + my_url + '/get_jobs_status' + '</div>');
-			},
-			error: function(ignore, textStatus, errorThrown) {
-				$('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
+				$.ajax({
+					url : crawler_url,
+					type : 'POST',
+					data : data,
+					success: function(data) {
+						$('#results').html('<div class="span12">Processing. Visit ' + 
+							'<a href="' + my_url + '/get_jobs_status' + '">Job Status</a></div>');
+					},
+					error: function(ignore, textStatus, errorThrown) {
+									 $('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
+					}
+				});
+
 			}
+
 		});
 
 		return false;
@@ -102,7 +109,7 @@ $('#venue_form').submit(function() {
 	}
 
 	//Radius
-	var radius = $("#radius");
+	var radius = $("#radius").val();
 	if(radius <= 0) {  
 		error = true;
 	} else {
@@ -116,20 +123,23 @@ $('#venue_form').submit(function() {
 		var my_url = 'http://' + window.location.host + '/quantarch';
 		var crawler_url = my_url + "/search_venue";
 
-		$.ajax({
+		var request = $.ajax({
 			url : crawler_url,
 			type : 'GET',
-			dataType: 'json',
 			data : data,
-			success: function(json) {
+			dataType: 'json'
+		});
+
+		request.done(function(json) {
 				parseVenueSearch(json);
 				venue_fetch();
-			},
-			error: function(ignore, textStatus, errorThrown) {
-							 console.log(ignore);
-				$('#results').html('<div class="span12">Error! ' + textStatus + '\n' + errorThrown + '</div>');
-			}
 		});
+
+		request.fail(function(ignore, textstatus, errorthrown) {
+			console.log(ignore);
+			$('#results').html('<div class="span12">Error! ' + textStatus + '\n' + errorThrown + '</div>');
+		});
+
 	}
 	return false;
 });
