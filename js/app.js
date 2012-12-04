@@ -29,8 +29,6 @@ venue_fetch = function() {
 				var my_url = 'http://' + window.location.host + '/quantarch';
 				var crawler_url = my_url + "/submit_job";
 
-				console.log(data);
-
 				$.ajax({
 					url : crawler_url,
 					type : 'POST',
@@ -39,7 +37,6 @@ venue_fetch = function() {
             $.getJSON(my_url + "/get_jobs_status", 
               function(job_status) {
                 var data_url_prefix = 'http://' + window.location.host + '/places-crawl/data/';
-                console.log(job_status);
                 var job_results = "";
                 for(var i = 0; i < job_status.length; i++) {
                   var job = job_status[i];
@@ -146,7 +143,6 @@ $('#venue_form').submit(function() {
 		});
 
 		request.done(function(json) {
-      console.log(json);
 				parseVenueSearch(json);
 				venue_fetch();
 		});
