@@ -36,8 +36,23 @@ venue_fetch = function() {
 					type : 'POST',
 					data : data,
 					success: function(data) {
-						$('#results').html('<div class="span12">Processing. Visit ' + 
-							'<a href="' + my_url + '/get_jobs_status' + '">Job Status</a></div>');
+            $.getJSON(my_url + "/get_jobs_status", 
+              function(job_status) {
+                var data_url_prefix = 'http://' + window.location.host + '/places-crawl/data/';
+                console.log(job_status);
+                var job_results = "";
+                for(var i = 0; i < job_status.length; i++) {
+                  var job = job_status[i];
+                  
+                  var descrip = 'ID: ' + job.job_id + ' status: ' + job.status 
+                    + ' <a href="' + data_url_prefix + job.foursquare_meta_url+ '">Foursquare URL</a>'
+                    + ' <a href="' + data_url_prefix + job.instagram_url + '">Instagram URL</a>';
+                  job_results += '<div class="row"><div class="span-12">' + descrip + '</div></div>';
+                }
+                $('#results').html('<div class="span12">Processing. Current available jobs are: ' + 
+                                   job_results  + '</div>');
+              }
+            );
 					},
 					error: function(ignore, textStatus, errorThrown) {
 									 $('#results').html('<div class="span12">Error! ' + textStatus + errorThrown + '</div>');
@@ -68,7 +83,7 @@ function parseVenueSearch(data) {
 		table_row.append('<td>' + venue.categories[0].shortName  + '</td>');
 		table_row.append('<td>' + venue.stats.checkinsCount  + '</td>');
 		table_row.append('<td>' + venue.stats.tipCount  + '</td>');
-		table_row.append('<td>' + venue.likes.count  + '</td>');
+		table_row.append('<td>' + venue.location.address + ", " + venue.location.city + '</td>');
 	}
 
 }
@@ -131,6 +146,7 @@ $('#venue_form').submit(function() {
 		});
 
 		request.done(function(json) {
+      console.log(json);
 				parseVenueSearch(json);
 				venue_fetch();
 		});
